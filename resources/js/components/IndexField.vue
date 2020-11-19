@@ -1,0 +1,38 @@
+<template>
+	<div :class="`text-${field.textAlign}`">
+    <tooltip trigger="click"  v-if="fields.length">
+      <div class="text-primary inline-flex items-center dim cursor-pointer">
+        <span class="text-primary font-bold">{{ __('View') }}</span>
+      </div> 
+      <tooltip-content slot="content" class="flex flex-wrap" style="width: 60vh">
+        <span 
+          class="flex px-2 py-4 w-1/2 border-30" 
+          v-for="(field, index) in fields"
+          :class="{
+            'border-r': index%2 == 0 && fields.length - index > 0, 
+            'border-b': fields.length - index > 1 && fields.length > 2
+          }"
+        > 
+          <span class="flex w-1/2">{{ field.name }}: </span>
+          <component
+  		      :key="index"
+  		      :is="`index-${field.component}`"
+  		      :resource-name="resourceName"
+  		      :field="field"
+  		    /> 
+        </span>
+      </tooltip-content>
+    </tooltip> 
+    <span v-else>&mdash;</span>
+  </div>
+</template>
+
+<script>
+import ResolvesFields from './ResolvesFields.vue'
+
+export default {
+  mixins: [ResolvesFields],
+
+	props: ['resourceName', 'field'], 
+}
+</script>
