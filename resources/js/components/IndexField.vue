@@ -1,6 +1,6 @@
 <template>
 	<div :class="`text-${field.textAlign}`">
-    <tooltip trigger="click"  v-if="fields.length">
+    <tooltip trigger="click"  v-if="fields.length > expansionOverflow">
       <div class="text-primary inline-flex items-center dim cursor-pointer">
         <span class="text-primary font-bold">{{ __('View') }}</span>
       </div> 
@@ -22,7 +22,20 @@
   		    /> 
         </span>
       </tooltip-content>
-    </tooltip> 
+    </tooltip>
+
+    <div class="flex flex-col" v-else-if="fields.length"> 
+      <div class="flex mt-2" v-for="(field, index) in fields"> 
+        <span class="pr-2 text-80">{{ field.name }}:</span>
+        <component 
+          :key="index"
+          :is="`index-${field.component}`"
+          :resource-name="resourceName"
+          :field="field"
+        />  
+      </div>
+    </div>
+    
     <span v-else>&mdash;</span>
   </div>
 </template>
@@ -34,5 +47,11 @@ export default {
   mixins: [ResolvesFields],
 
 	props: ['resourceName', 'field'], 
+
+  computed: {
+    expansionOverflow() {
+      return this.field.expansionOverflow ? this.field.expansionOverflow : 0;
+    },
+  },
 }
 </script>

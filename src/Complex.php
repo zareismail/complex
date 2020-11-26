@@ -201,4 +201,32 @@ class Complex extends Field
         return  parent::isShownOnCreation($request) &&
                 collect($this->meta['fields'])->filter->isShownOnCreation($request)->isNotEMpty(); 
     }
+
+    /**
+     * Margin of stacked values on the index.
+     *
+     * @param bool $expansionOverflow
+     *
+     * @return $this
+     */
+    public function expansionOverflow(int $expansionOverflow = 0)
+    {
+        $this->withMeta(compact('expansionOverflow'));
+
+        return $this;
+    } 
+
+    /**
+     * Fields overflow margin in the form.
+     *
+     * @param bool $groupOverflow
+     *
+     * @return $this
+     */
+    public function groupOverflow(int $groupOverflow = 0)
+    {
+        $this->withMeta(compact('groupOverflow'));
+
+        return $this;
+    } 
 }
