@@ -87,10 +87,8 @@ class Complex extends Field
      * @return mixed
      */
     public function fill(NovaRequest $request, $model)
-    {
-        collect($this->meta['fields'])->each->fill($request, $model);
-
-        return $this;
+    { 
+        return $this->fillFields($request, $model, __FUNCTION__);
     }
 
     /**
@@ -102,9 +100,25 @@ class Complex extends Field
      */
     public function fillForAction(NovaRequest $request, $model)
     {
-        collect($this->meta['fields'])->each->fillForAction($request, $model);
+        return $this->fillFields($request, $model, __FUNCTION__);
+    } 
 
-        return $this; 
+    /**
+     * Hydrate the given attribute on the model based on the incoming request and given callback.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  object  $model
+     * @return mixed
+     */
+    public function fillFields(NovaRequest $request, $model, $callback)
+    {
+        $callbacks = collect($this->meta['fields'])->map->{$callback}($request, $model)->filter(function($callback) {
+            return is_callable($callback);
+        });
+
+        $callbacks->each->__invoke();
+
+        return $this;
     }
 
     /**
