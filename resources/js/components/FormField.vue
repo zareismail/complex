@@ -42,6 +42,7 @@
           :show-help-text="field.helpText != null" 
           class="remove-field-defaults"
           v-show="isActive(field)"
+          ref="withoutLabel"
         />
       </template>
     </default-field> 
@@ -81,7 +82,8 @@ export default {
     active:null
   }),  
 
-  mounted() {  
+  mounted() { 
+  this.removeReferencedLabels() 
   },
 
   methods: {
@@ -106,6 +108,12 @@ export default {
     isActive(field) {
       return  this.active == field;
     },
+
+    removeReferencedLabels() {
+      this.$refs.withoutLabel.forEach(el => {
+        el.$el.querySelector('label').parentElement.style.display = `none`
+      })
+    }
   }, 
 
   computed: {
@@ -129,10 +137,7 @@ export default {
 }
 .remove-field-defaults.hidden {
   display: none;
-}
-.remove-field-defaults > div:first-child {
-  display: none !important;
-}
+} 
 .remove-field-defaults > div:nth-child(2) {
   width: 60% !important;
   padding: 0 !important;
