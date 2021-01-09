@@ -27,7 +27,7 @@ class Complex extends Field
         parent::__construct($name);
 
         $this->withMeta([
-            'fields' => collect($fields())->all()
+            'fields' => collect($fields())->values()->all()
         ]);
     }
 
